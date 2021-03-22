@@ -52,6 +52,10 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+
+// Overloading cpuUtilization
+float CpuUtilization(int pid);  
+  
 };  // namespace LinuxParser
 
 #endif
