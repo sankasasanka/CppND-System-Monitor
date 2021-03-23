@@ -164,7 +164,7 @@ float LinuxParser::CpuUtilization(int pid) {
   if(stream.is_open()){
     while (std::getline(stream,line)){
       std::istringstream linestream(line);
-      for(int i=0;i<=22;i++){
+      for(int i=1;i<=22;i++){
       	linestream>>val;
         if (i==14){
         	utime = std::stol(val)/sysconf(_SC_CLK_TCK);
@@ -183,8 +183,8 @@ float LinuxParser::CpuUtilization(int pid) {
         }
        }
       // CPU utilization Calculation
-      long total_time = utime +stime;
-      long seconds = uptime -(start_time);
+      float total_time = utime +stime;
+      float seconds = uptime -(start_time);
 
       cpu_usage = (total_time/seconds);  
       }

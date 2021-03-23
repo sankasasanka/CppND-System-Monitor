@@ -25,6 +25,7 @@ vector<Process>& System::Processes() {
   
   for (unsigned int i=0;i<inp_procs.size();i++){
   	processes_.push_back(Process(inp_procs[i]));
+    processes_[i].CpuUtilization();
   }
   std::sort(processes_.begin(),processes_.end());
   
