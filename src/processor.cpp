@@ -2,8 +2,6 @@
 #include "linux_parser.h"
 #include<iostream>
 
-// TODO: Return the aggregate CPU utilization
-
 // Constructor to initialize the Previous util
 Processor::Processor(): PrevTotalTime(0.0),PrevIdleTime(0.0){};
 

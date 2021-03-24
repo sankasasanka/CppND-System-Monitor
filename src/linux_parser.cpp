@@ -68,7 +68,6 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { 
   // /proc/meminfo is the location, it has multiple lines. only first 2 lines are needed
   float Mem,MemTotal,MemFree;
@@ -94,7 +93,7 @@ float LinuxParser::MemoryUtilization() {
 
   return (MemTotal-MemFree)/MemTotal; }
 
-// TODO: Read and return the system uptime
+
 long LinuxParser::UpTime() { 
   //located in kUptimeFilename
   std::string uptime,idletime;
@@ -110,20 +109,13 @@ long LinuxParser::UpTime() {
 
   return std::stol(uptime); }
 
-// TODO: Read and return the number of jiffies for the system
+// the following functions are not used
 long LinuxParser::Jiffies() { return 0; }
-
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
-
-// TODO: Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
+
 vector<string> LinuxParser::CpuUtilization() { 
    std::string key;
    std::string User,nice,system,idle,iowait,irq,softirq,steal,guest,guest_nice;
@@ -153,7 +145,7 @@ float LinuxParser::CpuUtilization(int pid) {
   // Convert Uptime in sec 
   long uptime = LinuxParser::UpTime();
   
-  long utime,stime,cutime,cstime,start_time;
+  long utime,stime,start_time;
   
   float cpu_usage=0.0;
   
@@ -172,12 +164,6 @@ float LinuxParser::CpuUtilization(int pid) {
         else if (i==15){
         	stime = std::stol(val)/sysconf(_SC_CLK_TCK);
         }
-        else if (i==16){
-        	cutime = std::stol(val)/sysconf(_SC_CLK_TCK);
-        }
-        else if (i==17){
-        	cstime = std::stol(val)/sysconf(_SC_CLK_TCK);
-        }
         else if (i==22){
         	start_time = std::stol(val)/sysconf(_SC_CLK_TCK);
         }
@@ -194,7 +180,7 @@ float LinuxParser::CpuUtilization(int pid) {
   
   return cpu_usage; }
 
-// TODO: Read and return the total number of processes
+
 int LinuxParser::TotalProcesses() { 
   std::string key;
   int val;
@@ -215,7 +201,7 @@ int LinuxParser::TotalProcesses() {
   }
   return val; }
 
-// TODO: Read and return the number of running processes
+
 int LinuxParser::RunningProcesses() { 
   std::string key;
   int val;
@@ -236,8 +222,7 @@ int LinuxParser::RunningProcesses() {
   }
   return val; }
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+
 string LinuxParser::Command(int pid) {
   string cmd,line;
   std::ifstream stream(kProcDirectory+"/"+std::to_string(pid)+kCmdlineFilename);
@@ -249,8 +234,7 @@ string LinuxParser::Command(int pid) {
   
   return cmd; }
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
+
 string LinuxParser::Ram(int pid) { 
   
   string key;
@@ -274,8 +258,6 @@ string LinuxParser::Ram(int pid) {
   
   return Ram_MB;  }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) { 
   
   string key;
@@ -296,8 +278,6 @@ string LinuxParser::Uid(int pid) {
   
   return val; }
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int pid) { 
 
   string pid_str = Uid(pid);
@@ -317,27 +297,28 @@ string LinuxParser::User(int pid) {
   }
   return value;}
 
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
+
 long LinuxParser::UpTime(int pid) { 
     
   string line;
   string value;
   long up_1;
-  long uptime;
+  long uptime=0;
+  
+  long system_uptime = LinuxParser::UpTime();
   
   std::ifstream stream(kProcDirectory+"/"+std::to_string(pid)+"/"+kStatFilename);
   if (stream.is_open()){
   	while (std::getline(stream,line)){
       std::istringstream linestream(line);
-      for (int i=0;i<=22;i++){
+      for (int i=0;i<=21;i++){
       	linestream>>value;
       }
      
      up_1 = std::stol(value);
-      // Converts Clocks into Seconds
+      // Converts Clocks into Secondss
      uptime = up_1/sysconf(_SC_CLK_TCK); 
-     return uptime;
+     return ( system_uptime-uptime);
   	}
     
   }
