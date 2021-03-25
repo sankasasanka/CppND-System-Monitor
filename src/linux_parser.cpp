@@ -110,10 +110,10 @@ long LinuxParser::UpTime() {
   return std::stol(uptime); }
 
 // the following functions are not used
-long LinuxParser::Jiffies() { return 0; }
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
-long LinuxParser::ActiveJiffies() { return 0; }
-long LinuxParser::IdleJiffies() { return 0; }
+//long LinuxParser::Jiffies() { return 0; }
+//long LinuxParser::ActiveJiffies(int pid) { return 0; }
+//long LinuxParser::ActiveJiffies() { return 0; }
+//long LinuxParser::IdleJiffies() { return 0; }
 
 
 vector<string> LinuxParser::CpuUtilization() { 
